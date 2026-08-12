@@ -25,6 +25,12 @@ Runs entirely on your own accounts — your own Supabase project, your own Anthr
 
 This is built for **Product Manager and Software Engineer interview loops** — you pick a track at campaign creation, and round types plus the competency taxonomy behind every generated prep doc (`src/lib/constants.ts`) are keyed per track. PM gets rounds like Product Sense and Analytical Thinking; SWE gets Coding and System Design in their place. It is not a general-purpose interview prep tool for arbitrary roles outside these two tracks — a role that isn't PM or SWE will still generate prep against whichever track you picked, not role-appropriate content for that role.
 
+## Demo
+
+| [![Watch the 60s demo](https://img.youtube.com/vi/bEZ5ZFo7k0Q/hqdefault.jpg)](https://youtu.be/bEZ5ZFo7k0Q) | [![Watch the full walkthrough](https://img.youtube.com/vi/xWJJsHSlrPk/maxresdefault.jpg)](https://youtu.be/xWJJsHSlrPk) |
+|:---:|:---:|
+| **[60-second demo](https://youtu.be/bEZ5ZFo7k0Q)** — the fast version | **[Full walkthrough](https://youtu.be/xWJJsHSlrPk)** — every feature, end to end |
+
 ## Screenshots
 
 | Fit analysis | Round prep |
