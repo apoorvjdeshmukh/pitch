@@ -7,6 +7,10 @@ Runs entirely on your own accounts — your own Supabase project, your own Anthr
 > [!WARNING]
 > **If you deploy this anywhere public, read [Before you deploy this anywhere public](#before-you-deploy-this-anywhere-public) first.** One shared API key pays for every generation call — an open deployment is an open invitation to spend your Anthropic budget.
 
+## Scope
+
+This is built specifically for **Product Manager interview loops** — the round types (Recruiter Screen, Hiring Manager, Product Sense, Analytical Thinking, Technical, Panel, Bar Raiser) and the competency taxonomy behind every generated prep doc (`src/lib/constants.ts`) are PM-specific: product sense, stakeholder influence, execution ownership, and so on. It is not a general-purpose interview prep tool. Typing in a non-PM role will still generate PM-flavored prep against these same round types and competencies, not role-appropriate content for that role.
+
 ## Screenshots
 
 | Fit analysis | Round prep |
