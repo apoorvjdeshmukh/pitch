@@ -7,6 +7,20 @@ Runs entirely on your own accounts — your own Supabase project, your own Anthr
 > [!WARNING]
 > **If you deploy this anywhere public, read [Before you deploy this anywhere public](#before-you-deploy-this-anywhere-public) first.** One shared API key pays for every generation call — an open deployment is an open invitation to spend your Anthropic budget.
 
+## Features
+
+- **PM and Software Engineer tracks** — pick a track per campaign; round types and competencies are tailored to each (Product Sense/Analytical Thinking for PM, Coding/System Design for SWE)
+- **Fit analysis** — paste a job description, get a fit score against your real background, plus concrete strengths and gaps (each gap comes with a way to close it before the interview)
+- **Company & vocabulary flashcards** — auto-generated from the JD so you walk in speaking the company's language
+- **Round-specific prep** — every round in the loop (Recruiter Screen, Hiring Manager, Technical, Bar Raiser, etc.) gets its own prep: what to expect, a pitch for the call, and the themes that round is actually probing for
+- **Interviewer research** — paste a LinkedIn bio or background note, get a read on what they likely care about and how to angle your answers for them specifically
+- **STAR story bank that compounds across jobs** — a guided Q&A flow turns a real moment into a polished story once, then tracks which competencies are covered and resurfaces stories automatically wherever they're relevant, campaign after campaign
+- **Day Before Brief** — a single-page, full-ink takeover pulling your best stories, company facts, interviewer notes, and questions to ask into one read-once page
+- **Per-campaign file uploads** — attach resumes, JDs, or notes to a campaign, stored privately per user
+- **Offline copy** — a snapshot view of your prep that works without a connection, useful right before you walk into a room with bad signal
+- **Installable PWA** — add it to your home screen like a native app
+- **Private by default** — Google OAuth or email/password auth, with row-level security in Postgres so every user only ever sees their own data
+
 ## Scope
 
 This is built for **Product Manager and Software Engineer interview loops** — you pick a track at campaign creation, and round types plus the competency taxonomy behind every generated prep doc (`src/lib/constants.ts`) are keyed per track. PM gets rounds like Product Sense and Analytical Thinking; SWE gets Coding and System Design in their place. It is not a general-purpose interview prep tool for arbitrary roles outside these two tracks — a role that isn't PM or SWE will still generate prep against whichever track you picked, not role-appropriate content for that role.
