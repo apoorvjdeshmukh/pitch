@@ -9,7 +9,13 @@ Runs entirely on your own accounts — your own Supabase project, your own Anthr
 
 ## Screenshots
 
-_Coming soon — placeholder for fit analysis, round prep, story bank, and day-before-brief screenshots._
+| Fit analysis | Round prep |
+|---|---|
+| ![Fit analysis](docs/screenshots/fit-analysis.png) | ![Round prep](docs/screenshots/round-prep.png) |
+
+**Day Before Brief** — a full-ink takeover pulling your top stories, company facts, interviewer notes, and questions to ask into one page:
+
+![Day Before Brief](docs/screenshots/day-before-brief.png)
 
 ## What it costs to run
 
