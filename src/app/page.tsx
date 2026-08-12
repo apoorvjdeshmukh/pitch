@@ -7,24 +7,10 @@ import CreateCampaignModal from '@/components/campaign/CreateCampaignModal'
 import AboutModal from '@/components/AboutModal'
 import Hint from '@/components/Hint'
 import { campaignLabel, fmtScheduled, nextScheduled, nextRound, relativeFromNow, fitScoreEmoji } from '@/lib/format'
-import type { Campaign, Round, RoundStatus } from '@/lib/types'
+import type { Campaign, Round, Track } from '@/lib/types'
 
 function fmtDate(iso: string) {
   try { return new Date(iso).toLocaleDateString() } catch { return '' }
-}
-
-const STATUS_INFO: Record<RoundStatus, { label: string; cls: string }> = {
-  'not-started': { label: 'Not started', cls: 's-ns' },
-  'in-prep': { label: 'In prep', cls: 's-ip' },
-  done: { label: 'Done', cls: 's-dn' },
-}
-
-// The row's status pill mirrors whichever round is "in focus": the soonest
-// scheduled one, or else the most recently added round.
-function statusFor(c: Campaign): { label: string; cls: string } {
-  if (c.rounds.length === 0) return STATUS_INFO['not-started']
-  const focus = nextRound(c.rounds) ?? c.rounds[c.rounds.length - 1]
-  return STATUS_INFO[focus.status]
 }
 
 export default function HomePage() {
@@ -59,8 +45,11 @@ export default function HomePage() {
   const preppedCount = activeCamps.reduce((sum, c) => sum + c.rounds.filter(r => r.artifacts).length, 0)
   const expectedTotal = activeCamps.reduce((sum, c) => sum + (c.expectedRounds ?? 0), 0)
   const hasExpected = activeCamps.some(c => c.expectedRounds != null)
-  const roundTypesInPlay = new Set(activeCamps.flatMap(c => c.rounds.map(r => r.type)))
-  const storyGaps = new Set(Array.from(roundTypesInPlay).flatMap(t => getGaps(t))).size
+  const roundKeysInPlay = new Set(activeCamps.flatMap(c => c.rounds.map(r => `${c.track ?? 'pm'}::${r.type}`)))
+  const storyGaps = new Set(Array.from(roundKeysInPlay).flatMap(key => {
+    const [track, type] = key.split('::') as [Track, string]
+    return getGaps(track, type)
+  })).size
 
   // Mobile: simplified single-line list row (company/role/rounds + next date)
   // replacing the old card grid.
@@ -85,7 +74,6 @@ export default function HomePage() {
 
   function renderTableRow(c: Campaign) {
     const next = nextScheduled(c.rounds)
-    const status = statusFor(c)
     const expected = c.expectedRounds
     return (
       <div key={c.id} className={`pipeline-row${c.active ? '' : ' inactive'}`} onClick={() => router.push(`/campaign/${c.id}`)}>
@@ -106,7 +94,6 @@ export default function HomePage() {
           )}
         </span>
         <span className={`pipeline-next${next ? ' soon' : ''}`}>{next ? fmtScheduled(next) : 'Not scheduled'}</span>
-        <span className={`status-chip ${status.cls}`}>{status.label}</span>
       </div>
     )
   }
@@ -175,7 +162,7 @@ export default function HomePage() {
               </div>
               <div className="pipeline-table-wrap">
                 <div className="pipeline-table-head">
-                  <span>Company</span><span>Role</span><span>Rounds</span><span>Next</span><span>Status</span>
+                  <span>Company</span><span>Role</span><span>Rounds</span><span>Next</span>
                 </div>
                 {activeCamps.map(renderTableRow)}
                 {inactiveCamps.map(renderTableRow)}

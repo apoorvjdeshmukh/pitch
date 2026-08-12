@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase'
-import type { Campaign, Story, Profile } from '@/lib/types'
+import type { Campaign, Story, Profile, Track } from '@/lib/types'
 import { ROUND_COMP } from '@/lib/constants'
 import { saveOfflineSnapshot } from '@/lib/offlineSnapshot'
 import { showToast } from '@/lib/toastStore'
@@ -26,8 +26,8 @@ interface AppContextValue {
   deleteStory: (id: string) => Promise<void>
   getCampaign: (id: string) => Campaign | null
   getRound: (cId: string, rId: string) => Campaign['rounds'][number] | null
-  getMatchedStories: (roundType: string) => Story[]
-  getGaps: (roundType: string) => string[]
+  getMatchedStories: (track: Track, roundType: string) => Story[]
+  getGaps: (track: Track, roundType: string) => string[]
   uid: () => string
   signOut: () => Promise<void>
 }
@@ -208,13 +208,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return getCampaign(cId)?.rounds.find(r => r.id === rId) ?? null
   }, [getCampaign])
 
-  const getMatchedStories = useCallback((roundType: string) => {
-    const needed = ROUND_COMP[roundType] ?? []
+  const getMatchedStories = useCallback((track: Track, roundType: string) => {
+    const needed = ROUND_COMP[track]?.[roundType] ?? []
     return bank.filter(s => s.competencies.some(c => needed.includes(c)))
   }, [bank])
 
-  const getGaps = useCallback((roundType: string) => {
-    const needed = ROUND_COMP[roundType] ?? []
+  const getGaps = useCallback((track: Track, roundType: string) => {
+    const needed = ROUND_COMP[track]?.[roundType] ?? []
     const covered = new Set(bank.flatMap(s => s.competencies))
     return needed.filter(c => !covered.has(c))
   }, [bank])

@@ -6,19 +6,34 @@ import { useApp } from '@/context/AppContext'
 import Breadcrumb from '@/components/Breadcrumb'
 import { COMP, ROUND_COMP } from '@/lib/constants'
 import { useSmartBack } from '@/lib/useSmartBack'
-import type { Story } from '@/lib/types'
+import type { Story, Track } from '@/lib/types'
 
 // How many of a campaign's actual rounds this story would show up as a
 // matched story for, based on competency overlap with that round's type.
-function usageCount(story: Story, camps: Array<{ rounds: Array<{ type: string }> }>): number {
+function usageCount(story: Story, camps: Array<{ track?: Track; rounds: Array<{ type: string }> }>): number {
   let count = 0
   for (const c of camps) {
+    const needed_map = ROUND_COMP[c.track ?? 'pm']
     for (const r of c.rounds) {
-      const needed = ROUND_COMP[r.type] ?? []
+      const needed = needed_map[r.type] ?? []
       if (story.competencies.some(ck => needed.includes(ck))) count++
     }
   }
   return count
+}
+
+// Scope the "browse by competency" / coverage UI to competencies that
+// actually matter for the tracks the user's campaigns are in — otherwise a
+// PM-only user would see SWE-only competencies (and vice versa) inflating
+// the "covered of total" denominator with keys they'll never fill.
+function relevantCompFor(camps: Array<{ track?: Track }>): Record<string, string> {
+  const tracks = Array.from(new Set(camps.map(c => c.track ?? 'pm')))
+  const tracksToUse: Track[] = tracks.length > 0 ? tracks : ['pm']
+  const keys = new Set<string>()
+  tracksToUse.forEach(t => {
+    Object.values(ROUND_COMP[t]).forEach(needed => needed.forEach(k => keys.add(k)))
+  })
+  return Object.fromEntries(Object.entries(COMP).filter(([k]) => keys.has(k)))
 }
 
 const emptyFields = { title: '', situation: '', task: '', action: '', result: '' }
@@ -35,6 +50,8 @@ export default function BankPage() {
   const [showAddStory, setShowAddStory] = useState(false)
   const [addComp, setAddComp] = useState('')
   const [addCampaignId, setAddCampaignId] = useState('')
+
+  const relevantComp = relevantCompFor(camps)
 
   const byComp: Record<string, typeof bank> = {}
   bank.forEach(s => {
@@ -93,14 +110,14 @@ export default function BankPage() {
   }
 
   function openAddStory() {
-    setAddComp(filterKey ?? Object.keys(COMP)[0])
+    setAddComp(filterKey ?? Object.keys(relevantComp)[0])
     setAddCampaignId(camps[0]?.id ?? '')
     setShowAddStory(true)
   }
 
   const selectedStory = bank.find(s => s.id === selectedId) ?? null
-  const totalComp = Object.keys(COMP).length
-  const coveredComp = Object.keys(COMP).filter(ck => (byComp[ck]?.length ?? 0) > 0).length
+  const totalComp = Object.keys(relevantComp).length
+  const coveredComp = Object.keys(relevantComp).filter(ck => (byComp[ck]?.length ?? 0) > 0).length
 
   return (
     <>
@@ -122,7 +139,7 @@ export default function BankPage() {
               <div className="empty-sub">Open a round&apos;s Stories tab and fill a gap to start building your bank.</div>
             </div>
           ) : (
-            Object.entries(COMP).map(([ck, label]) => {
+            Object.entries(relevantComp).map(([ck, label]) => {
               const stories = byComp[ck] ?? []
               return (
                 <div key={ck} className="bank-group">
@@ -190,7 +207,7 @@ export default function BankPage() {
                   <span>All</span>
                   <span className="bank-comp-count">{bank.length}</span>
                 </button>
-                {Object.entries(COMP).map(([ck, label]) => (
+                {Object.entries(relevantComp).map(([ck, label]) => (
                   <button key={ck} className={`bank3-filter-item${filterKey === ck ? ' active' : ''}`} onClick={() => setFilterKey(ck)}>
                     <span>{label}</span>
                     <span className="bank-comp-count">{byComp[ck]?.length ?? 0}</span>
@@ -312,7 +329,7 @@ export default function BankPage() {
             <div className="form-group">
               <label>Competency</label>
               <select value={addComp} onChange={e => setAddComp(e.target.value)}>
-                {Object.entries(COMP).map(([ck, label]) => <option key={ck} value={ck}>{label}</option>)}
+                {Object.entries(relevantComp).map(([ck, label]) => <option key={ck} value={ck}>{label}</option>)}
               </select>
             </div>
             <div className="form-group">

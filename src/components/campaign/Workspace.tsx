@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useApp } from '@/context/AppContext'
-import { ROUND_TYPES, EXPECTED_ROUNDS_OPTIONS } from '@/lib/constants'
+import { roundTypesFor, EXPECTED_ROUNDS_OPTIONS } from '@/lib/constants'
 import { campaignLabel, fmtScheduled, nextRound } from '@/lib/format'
 import type { Campaign, Round } from '@/lib/types'
 
@@ -21,7 +21,8 @@ export default function Workspace({ campaign, activeRoundId, children }: Props) 
   const { mutateCamp, uid } = useApp()
   const [showAddRound, setShowAddRound] = useState(false)
   const [showEditExpected, setShowEditExpected] = useState(false)
-  const [roundType, setRoundType] = useState(ROUND_TYPES[0])
+  const roundTypes = roundTypesFor(campaign.track ?? 'pm')
+  const [roundType, setRoundType] = useState(roundTypes[0])
 
   const overviewHref = `/campaign/${campaign.id}`
   const onOverview = pathname === overviewHref
@@ -141,7 +142,7 @@ export default function Workspace({ campaign, activeRoundId, children }: Props) 
             <div className="form-group">
               <label>Interview Type</label>
               <select value={roundType} onChange={e => setRoundType(e.target.value)}>
-                {ROUND_TYPES.map(t => <option key={t}>{t}</option>)}
+                {roundTypes.map(t => <option key={t}>{t}</option>)}
               </select>
             </div>
             <div className="modal-footer">

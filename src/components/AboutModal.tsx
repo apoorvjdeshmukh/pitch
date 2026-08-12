@@ -9,7 +9,7 @@ export default function AboutModal({ onClose }: { onClose: () => void }) {
         <div className="form-group">
           <label>Why this app exists</label>
           <p style={{ fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--ink)' }}>
-            Prepping for a PM interview loop means different stories, different company facts,
+            Prepping for a PM or Software Engineer interview loop means different stories, different company facts,
             and different vocabulary for every round of every company — and doing that in scattered
             docs falls apart the moment you&apos;re running more than one live campaign at a time.
             Pitch treats each job application as a &ldquo;campaign&rdquo; with a shared foundation

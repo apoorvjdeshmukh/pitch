@@ -7,7 +7,7 @@ import { callClaudeStream, parseJSON } from '@/lib/claude'
 import { roundPrompt } from '@/lib/prompts'
 import { showLoading, hideLoading, appendStreamText } from '@/lib/loadingStore'
 import { showToast } from '@/lib/toastStore'
-import { ROUND_TYPES, EXPECTED_ROUNDS_OPTIONS } from '@/lib/constants'
+import { roundTypesFor, EXPECTED_ROUNDS_OPTIONS } from '@/lib/constants'
 import { fmtScheduled } from '@/lib/format'
 import type { Campaign, Round, RoundArtifacts } from '@/lib/types'
 
@@ -18,7 +18,8 @@ export default function RoundsList({ campaign }: { campaign: Campaign }) {
   const router = useRouter()
   const { mutateCamp, uid } = useApp()
   const [showModal, setShowModal] = useState(false)
-  const [roundType, setRoundType] = useState(ROUND_TYPES[0])
+  const roundTypes = roundTypesFor(campaign.track ?? 'pm')
+  const [roundType, setRoundType] = useState(roundTypes[0])
   const [err, setErr] = useState('')
   const [editingExpected, setEditingExpected] = useState(false)
 
@@ -119,7 +120,7 @@ export default function RoundsList({ campaign }: { campaign: Campaign }) {
             <div className="form-group">
               <label>Interview Type</label>
               <select value={roundType} onChange={e => setRoundType(e.target.value)}>
-                {ROUND_TYPES.map(t => <option key={t}>{t}</option>)}
+                {roundTypes.map(t => <option key={t}>{t}</option>)}
               </select>
             </div>
             {err && <p className="error">{err}</p>}

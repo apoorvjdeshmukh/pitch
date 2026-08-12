@@ -1,3 +1,5 @@
+export type Track = 'pm' | 'swe'
+
 export interface FitAnalysis {
   summary: string
   strengths: string[]
@@ -96,6 +98,8 @@ export interface Campaign {
   hidden?: boolean
   files?: CampaignFile[]
   expectedRounds?: number | null
+  // Missing on campaigns created before tracks existed — treat as 'pm'.
+  track?: Track
 }
 
 export interface Story {

@@ -9,12 +9,15 @@ import { campaignFitPrompt, campaignCardsPrompt } from '@/lib/prompts'
 import { showLoading, hideLoading, setStreamText } from '@/lib/loadingStore'
 import { showToast } from '@/lib/toastStore'
 import { storyContextText } from '@/lib/format'
-import { EXPECTED_ROUNDS_OPTIONS } from '@/lib/constants'
-import type { CampaignArtifacts, FitAnalysis, FlashCard, Campaign } from '@/lib/types'
+import { EXPECTED_ROUNDS_OPTIONS, TRACK_LABELS } from '@/lib/constants'
+import type { CampaignArtifacts, FitAnalysis, FlashCard, Campaign, Track } from '@/lib/types'
+
+const TRACK_OPTIONS: Track[] = ['pm', 'swe']
 
 export default function CreateCampaignModal({ onClose }: { onClose: () => void }) {
   const router = useRouter()
   const { persistCamp, uid, background, bank } = useApp()
+  const [track, setTrack] = useState<Track>('pm')
   const [role, setRole] = useState('')
   const [company, setCompany] = useState('')
   const [jd, setJd] = useState('')
@@ -53,6 +56,7 @@ export default function CreateCampaignModal({ onClose }: { onClose: () => void }
       const artifacts: CampaignArtifacts = { fitAnalysis, companyCards: cards.companyCards, roleVocabCards: cards.roleVocabCards }
       const campaign: Campaign = {
         id: uid(),
+        track,
         role: role.trim(),
         company: company.trim(),
         jd: jd.trim(),
@@ -76,8 +80,23 @@ export default function CreateCampaignModal({ onClose }: { onClose: () => void }
       <div className="modal">
         <div className="modal-title">New Campaign</div>
         <div className="form-group">
+          <label>Track</label>
+          <div className="seg-control">
+            {TRACK_OPTIONS.map(t => (
+              <button
+                key={t}
+                type="button"
+                className={`seg-opt${track === t ? ' active' : ''}`}
+                onClick={() => setTrack(t)}
+              >
+                {TRACK_LABELS[t]}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="form-group">
           <label>Role Title</label>
-          <input type="text" value={role} onChange={e => setRole(e.target.value)} placeholder="e.g. Senior Product Manager" />
+          <input type="text" value={role} onChange={e => setRole(e.target.value)} placeholder={track === 'swe' ? 'e.g. Senior Software Engineer' : 'e.g. Senior Product Manager'} />
         </div>
         <div className="form-group">
           <label>Company</label>

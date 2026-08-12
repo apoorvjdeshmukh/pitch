@@ -22,7 +22,7 @@ interface Props {
 export default function RoundStories({ campaign, roundId, roundType, hasBrief, matchedStories }: Props) {
   const router = useRouter()
   const campaignId = campaign.id
-  const needed = ROUND_COMP[roundType] ?? []
+  const needed = ROUND_COMP[campaign.track ?? 'pm'][roundType] ?? []
   const coveredMap: Record<string, Story> = {}
   matchedStories.forEach(s => s.competencies.forEach(ck => { if (!coveredMap[ck]) coveredMap[ck] = s }))
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})

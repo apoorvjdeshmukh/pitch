@@ -26,7 +26,7 @@ export default function BriefPage() {
 
   if (!campaign || !round) return null
 
-  const matched = getMatchedStories(round.type)
+  const matched = getMatchedStories(campaign.track ?? 'pm', round.type)
 
   async function generate() {
     const storySummaries = matched.slice(0, 5).map(s =>

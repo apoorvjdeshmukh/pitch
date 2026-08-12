@@ -9,18 +9,19 @@ import RoundStories from '@/components/round/RoundStories'
 import InterviewerPanel from '@/components/round/InterviewerPanel'
 import Workspace from '@/components/campaign/Workspace'
 import SectionNav from '@/components/SectionNav'
+import DateTimePicker from '@/components/DateTimePicker'
 import { callClaudeStream, parseJSON } from '@/lib/claude'
 import { roundPrompt } from '@/lib/prompts'
 import { showLoading, hideLoading, appendStreamText } from '@/lib/loadingStore'
 import { showToast } from '@/lib/toastStore'
 import type { RoundStatus, RoundArtifacts as RoundArtifactsData } from '@/lib/types'
 import { useSmartBack } from '@/lib/useSmartBack'
-import { campaignLabel, interviewerNoteText, storyContextText, fmtScheduled, toDatetimeLocalValue, formatStreamPreview } from '@/lib/format'
+import { campaignLabel, interviewerNoteText, storyContextText, formatStreamPreview } from '@/lib/format'
 
 const STATUS_OPTS: Array<[RoundStatus, string, string]> = [
-  ['not-started', 'Not started', 'sel-ns'],
-  ['in-prep', 'In prep', 'sel-ip'],
-  ['done', 'Done', 'sel-dn'],
+  ['not-started', 'Not started', 's-ns'],
+  ['in-prep', 'In prep', 's-ip'],
+  ['done', 'Done', 's-dn'],
 ]
 
 type Tab = 'prep' | 'stories' | 'interviewer'
@@ -58,6 +59,17 @@ export default function RoundPage() {
   const [generating, setGenerating] = useState(false)
   const [genText, setGenText] = useState('')
   const [elapsed, setElapsed] = useState(0)
+  const [statusOpen, setStatusOpen] = useState(false)
+  const statusRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!statusOpen) return
+    function onClick(e: MouseEvent) {
+      if (statusRef.current && !statusRef.current.contains(e.target as Node)) setStatusOpen(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [statusOpen])
 
   function setTab(t: Tab) {
     setTabState(t)
@@ -92,13 +104,11 @@ export default function RoundPage() {
     await mutateRound(campaignId, roundId, r => { r.status = status })
   }
 
-  async function setScheduledAt(value: string) {
-    await mutateRound(campaignId, roundId, r => {
-      r.scheduledAt = value ? new Date(value).toISOString() : null
-    })
+  async function setScheduledAt(iso: string | null) {
+    await mutateRound(campaignId, roundId, r => { r.scheduledAt = iso })
   }
 
-  const matchedStories = getMatchedStories(round.type)
+  const matchedStories = getMatchedStories(campaign.track ?? 'pm', round.type)
 
   async function regeneratePrep() {
     showLoading('Regenerating prep...')
@@ -146,28 +156,37 @@ export default function RoundPage() {
     }
   }
 
-  const dateChip = (
-    <label className={`date-chip${round.scheduledAt ? '' : ' empty'}`}>
-      <span>{round.scheduledAt ? fmtScheduled(round.scheduledAt) : 'Not scheduled'}</span>
-      <input
-        type="datetime-local"
-        value={toDatetimeLocalValue(round.scheduledAt)}
-        onChange={e => setScheduledAt(e.target.value)}
-      />
-    </label>
-  )
+  const dateChip = <DateTimePicker value={round.scheduledAt} onChange={setScheduledAt} />
 
-  const statusRow = (
-    <div className="status-row">
-      {STATUS_OPTS.map(([val, lbl, cls]) => (
-        <button
-          key={val}
-          className={`st-opt${round.status === val ? ` ${cls}` : ''}`}
-          onClick={() => setStatus(val)}
-        >
-          {lbl}
-        </button>
-      ))}
+  const currentStatusOpt = STATUS_OPTS.find(([val]) => val === round.status) ?? STATUS_OPTS[0]
+
+  const statusDropdown = (
+    <div className="status-dropdown" ref={statusRef}>
+      <button
+        type="button"
+        className={`status-chip status-dropdown-trigger ${currentStatusOpt[2]}`}
+        onClick={() => setStatusOpen(v => !v)}
+      >
+        {currentStatusOpt[1]}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+      {statusOpen && (
+        <div className="status-dropdown-menu">
+          {STATUS_OPTS.map(([val, lbl, cls]) => (
+            <button
+              key={val}
+              type="button"
+              className={`status-dropdown-item${round.status === val ? ' active' : ''}`}
+              onClick={() => { setStatus(val); setStatusOpen(false) }}
+            >
+              <span className={`status-dropdown-item-dot ${cls}`} />
+              {lbl}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 
@@ -192,7 +211,7 @@ export default function RoundPage() {
 
           <div className="sec" style={{ marginBottom: '0.75rem' }}>
             <div className="sec-title">Status</div>
-            {statusRow}
+            {statusDropdown}
           </div>
 
           <div className="tab-bar">
@@ -237,7 +256,7 @@ export default function RoundPage() {
               <div className="workspace-content-title">{round.type}</div>
               <div className="workspace-round-header-controls">
                 {dateChip}
-                {statusRow}
+                {statusDropdown}
               </div>
             </div>
 
