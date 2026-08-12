@@ -113,6 +113,23 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+### Or run it with Docker
+
+Steps 1–7 above (Supabase project, schema, storage, Google sign-in, Anthropic key,
+`.env.local`) are still required — Docker replaces step 8 (`npm install`/`npm run
+dev`), not the account setup.
+
+```bash
+docker compose --env-file .env.local up --build
+```
+
+Open `http://localhost:3000`. Note: `NEXT_PUBLIC_SUPABASE_URL` and
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` get compiled into the client bundle at *build*
+time (standard Next.js behavior, not Docker-specific) — if you change either
+value later, rebuild with `--build` rather than just restarting the container.
+Both are public-safe values (that's what `NEXT_PUBLIC_` means), so this isn't a
+secrets concern, just a "did I actually rebuild" one.
+
 ## Before you deploy this anywhere public
 
 Every AI generation call in this app runs through the single `ANTHROPIC_API_KEY` you configure — it's a per-deployment key, not a per-user one. That means **anyone who can sign in to your deployment can spend your Anthropic budget**, and Google OAuth doesn't restrict sign-in to specific accounts by default. If you deploy this and the URL becomes public or discoverable, you're exposed until you do something about it.
