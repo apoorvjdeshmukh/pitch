@@ -11,6 +11,18 @@ Runs entirely on your own accounts — your own Supabase project, your own Anthr
 
 _Coming soon — placeholder for fit analysis, round prep, story bank, and day-before-brief screenshots._
 
+## What it costs to run
+
+Measured from a real campaign run (Claude Sonnet, at $3/MTok input · $15/MTok output — check [anthropic.com/pricing](https://www.anthropic.com/pricing) for current rates):
+
+| Campaign size | Claude API cost |
+|---|---|
+| 4 rounds, 1 story captured per round | ~$0.16 |
+| 6 rounds | ~$0.22 |
+| 7 rounds (max) | ~$0.26 |
+
+That's the entire cost of running this — no subscription, no hosting fee, no Supabase/Vercel paid tier required (both have free tiers that comfortably cover personal use). A full job search with several campaigns running in parallel is still well under a dollar in AI spend.
+
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router) + React + TypeScript
