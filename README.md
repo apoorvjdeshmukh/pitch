@@ -43,6 +43,8 @@ This is built for **Product Manager and Software Engineer interview loops** — 
 
 ## What it costs to run
 
+Interview coaching services and prep subscriptions routinely run $100+ — for one session, or per month. Self-hosting Pitch instead, a full campaign's worth of AI-generated prep costs **cents**, because you're paying Anthropic's raw API rate instead of anyone's markup.
+
 Measured from a real campaign run (Claude Sonnet, at $3/MTok input · $15/MTok output — check [anthropic.com/pricing](https://www.anthropic.com/pricing) for current rates):
 
 | Campaign size | Claude API cost |
