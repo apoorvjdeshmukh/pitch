@@ -2,6 +2,15 @@
 
 Round-specific interview prep that compounds across every job. Paste a job description, get a fit analysis and tailored prep for every interview stage, research your interviewer, build a reusable STAR story bank, and generate a day-before brief pulling it all together.
 
+Runs entirely on your own accounts — your own Supabase project, your own Anthropic API key. Nothing here talks to anyone else's account or server. Free to self-host; see [License](#license) if you're thinking about anything commercial.
+
+> [!WARNING]
+> **If you deploy this anywhere public, read [Before you deploy this anywhere public](#before-you-deploy-this-anywhere-public) first.** One shared API key pays for every generation call — an open deployment is an open invitation to spend your Anthropic budget.
+
+## Screenshots
+
+_Coming soon — placeholder for fit analysis, round prep, story bank, and day-before-brief screenshots._
+
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router) + React + TypeScript
@@ -10,7 +19,7 @@ Round-specific interview prep that compounds across every job. Paste a job descr
 
 ## Running it yourself
 
-Every generation call runs through your own Anthropic API key, and all your data lives in your own Supabase project — nothing here talks to anyone else's account. That means running this locally (or deploying your own copy) needs a bit of one-time setup before it works. None of it is optional; skipping a step just means that piece silently doesn't work.
+**Time to first run: ~15 minutes**, most of it waiting on Supabase/Google Cloud dashboards rather than typing. That means running this locally (or deploying your own copy) needs a bit of one-time setup before it works. None of it is optional; skipping a step just means that piece silently doesn't work.
 
 ### 1. Clone and install
 
@@ -68,4 +77,4 @@ The fix: set `ALLOWED_EMAILS` (comma-separated) in your deployment's environment
 
 ## License
 
-Not yet finalized.
+[PolyForm Noncommercial 1.0.0](LICENSE) — free to run, modify, and share for any non-commercial purpose, including personal use, self-hosting, and job hunting. If you want to build something commercial on top of this (a paid product, a hosted service, etc.), that needs a separate license — [open an issue](../../issues/new) or reach out via [GitHub](https://github.com/apoorvjdeshmukh) to talk terms.
