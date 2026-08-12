@@ -77,4 +77,4 @@ The fix: set `ALLOWED_EMAILS` (comma-separated) in your deployment's environment
 
 ## License
 
-[PolyForm Noncommercial 1.0.0](LICENSE) — free to run, modify, and share for any non-commercial purpose, including personal use, self-hosting, and job hunting. If you want to build something commercial on top of this (a paid product, a hosted service, etc.), that needs a separate license — [open an issue](../../issues/new) or reach out via [GitHub](https://github.com/apoorvjdeshmukh) to talk terms.
+[PolyForm Noncommercial 1.0.0](LICENSE) — free to run, modify, and share for any non-commercial purpose, including personal use, self-hosting, and job hunting. If you want to build something commercial on top of this (a paid product, a hosted service, etc.), that needs a separate license — [open an issue](../../issues/new) or email [apoorv.jdeshmukh@gmail.com](mailto:apoorv.jdeshmukh@gmail.com) to talk terms.
