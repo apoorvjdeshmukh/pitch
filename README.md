@@ -9,7 +9,7 @@ Runs entirely on your own accounts — your own Supabase project, your own Anthr
 
 ## Scope
 
-This is built specifically for **Product Manager interview loops** — the round types (Recruiter Screen, Hiring Manager, Product Sense, Analytical Thinking, Technical, Panel, Bar Raiser) and the competency taxonomy behind every generated prep doc (`src/lib/constants.ts`) are PM-specific: product sense, stakeholder influence, execution ownership, and so on. It is not a general-purpose interview prep tool. Typing in a non-PM role will still generate PM-flavored prep against these same round types and competencies, not role-appropriate content for that role.
+This is built for **Product Manager and Software Engineer interview loops** — you pick a track at campaign creation, and round types plus the competency taxonomy behind every generated prep doc (`src/lib/constants.ts`) are keyed per track. PM gets rounds like Product Sense and Analytical Thinking; SWE gets Coding and System Design in their place. It is not a general-purpose interview prep tool for arbitrary roles outside these two tracks — a role that isn't PM or SWE will still generate prep against whichever track you picked, not role-appropriate content for that role.
 
 ## Screenshots
 
