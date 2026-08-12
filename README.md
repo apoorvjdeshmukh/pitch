@@ -130,6 +130,37 @@ value later, rebuild with `--build` rather than just restarting the container.
 Both are public-safe values (that's what `NEXT_PUBLIC_` means), so this isn't a
 secrets concern, just a "did I actually rebuild" one.
 
+## Roadmap — what's not here yet, and why
+
+Honest notes on scope, not promises with a timeline.
+
+- **A hosted, multi-tenant version.** This app is self-hosted per person on
+  purpose — there's no shared account system to build. Offering it as
+  something people sign up for instead of self-host would mean an admin
+  portal to manage users and billing, a real security posture for holding
+  other people's interview data (not just your own), and a recurring cost to
+  run — real infrastructure this project doesn't have today.
+- **Speech-to-text / text-to-speech**, to unlock mock interviews you talk
+  through out loud instead of reading prep. Scoped out for now because voice
+  API usage costs meaningfully more than the text generation this currently
+  uses, and the "cents per campaign" claim above should stay true rather than
+  become an asterisk.
+- **Self-hosted LLM support** (Ollama, LM Studio, anything OpenAI-compatible),
+  to push the cost story from "cents" to "free." Held off because the prompts
+  are tuned against Claude's reliability at strict structured JSON output —
+  smaller local models are meaningfully less consistent at that, so shipping
+  this without testing against real local models first risks flaky generation
+  for exactly the users trying to spend the least money.
+- **Editable AI-generated content.** Every generated section already discloses
+  its limits (e.g. company cards note they're not verified against live
+  data), but the only fix for a wrong fact today is regenerating the whole
+  section. Letting people correct a flashcard, fact, or story in place — with
+  the edit surviving future regenerations instead of being silently
+  overwritten — is the highest-leverage next step for actually trusting the
+  output rather than just being warned about it. Not just an editing-UI
+  problem: the real complexity is tracking which fields are user-corrected
+  versus AI-generated so a regenerate respects the correction.
+
 ## Before you deploy this anywhere public
 
 Every AI generation call in this app runs through the single `ANTHROPIC_API_KEY` you configure — it's a per-deployment key, not a per-user one. That means **anyone who can sign in to your deployment can spend your Anthropic budget**, and Google OAuth doesn't restrict sign-in to specific accounts by default. If you deploy this and the URL becomes public or discoverable, you're exposed until you do something about it.
