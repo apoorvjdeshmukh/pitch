@@ -27,9 +27,9 @@ This is built for **Product Manager and Software Engineer interview loops** — 
 
 ## Demo
 
-| [![Watch the 60s demo](https://img.youtube.com/vi/bEZ5ZFo7k0Q/hqdefault.jpg)](https://youtu.be/bEZ5ZFo7k0Q) | [![Watch the full walkthrough](https://img.youtube.com/vi/xWJJsHSlrPk/maxresdefault.jpg)](https://youtu.be/xWJJsHSlrPk) |
+| [![Watch the 60s demo](https://img.youtube.com/vi/1IbYyI2N2y0/maxresdefault.jpg)](https://youtu.be/1IbYyI2N2y0) | [![Watch the full walkthrough](https://img.youtube.com/vi/iPyjZsyJncg/maxresdefault.jpg)](https://youtu.be/iPyjZsyJncg) |
 |:---:|:---:|
-| **[60-second demo](https://youtu.be/bEZ5ZFo7k0Q)** — the fast version | **[Full walkthrough](https://youtu.be/xWJJsHSlrPk)** — every feature, end to end |
+| **[60-second demo](https://youtu.be/1IbYyI2N2y0)** — the fast version | **[Full walkthrough](https://youtu.be/iPyjZsyJncg)** — every feature, end to end |
 
 ## Screenshots
 
