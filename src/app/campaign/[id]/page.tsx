@@ -157,19 +157,6 @@ export default function CampaignPage() {
       <div className="desktop-view">
         <Workspace campaign={campaign}>
           <div className="workspace-content" ref={contentRef}>
-            <div className="workspace-content-header">
-              <div>
-                <div className="workspace-content-title">{campaignLabel(campaign)}</div>
-                <button className="workspace-active-toggle" onClick={toggleActive}>
-                  {campaign.active ? 'Mark not interviewing' : 'Mark active again'}
-                </button>
-              </div>
-              <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-                <button className="header-action" onClick={toggleHidden}>{campaign.hidden ? 'Unhide' : 'Hide from list'}</button>
-                <button className="header-action danger" onClick={deleteCampaign}>Delete</button>
-              </div>
-            </div>
-
             <section id="fit-analysis" className="workspace-section">
               <FitAnalysis fit={campaign.artifacts.fitAnalysis} campaignId={campaign.id} />
             </section>

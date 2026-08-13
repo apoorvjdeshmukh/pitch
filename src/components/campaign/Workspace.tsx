@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useApp } from '@/context/AppContext'
 import { roundTypesFor, EXPECTED_ROUNDS_OPTIONS } from '@/lib/constants'
@@ -18,11 +18,42 @@ interface Props {
 export default function Workspace({ campaign, activeRoundId, children }: Props) {
   const router = useRouter()
   const pathname = usePathname()
-  const { mutateCamp, uid } = useApp()
+  const { mutateCamp, removeCamp, uid } = useApp()
   const [showAddRound, setShowAddRound] = useState(false)
   const [showEditExpected, setShowEditExpected] = useState(false)
   const roundTypes = roundTypesFor(campaign.track ?? 'pm')
   const [roundType, setRoundType] = useState(roundTypes[0])
+  const [activeMenuOpen, setActiveMenuOpen] = useState(false)
+  const [kebabOpen, setKebabOpen] = useState(false)
+  const activeMenuRef = useRef<HTMLDivElement>(null)
+  const kebabRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!activeMenuOpen && !kebabOpen) return
+    function onClick(e: MouseEvent) {
+      if (activeMenuRef.current && !activeMenuRef.current.contains(e.target as Node)) setActiveMenuOpen(false)
+      if (kebabRef.current && !kebabRef.current.contains(e.target as Node)) setKebabOpen(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [activeMenuOpen, kebabOpen])
+
+  async function toggleActive() {
+    setActiveMenuOpen(false)
+    await mutateCamp(campaign.id, c => { c.active = !c.active })
+  }
+
+  async function toggleHidden() {
+    setKebabOpen(false)
+    await mutateCamp(campaign.id, c => { c.hidden = !c.hidden })
+  }
+
+  async function deleteCampaign() {
+    setKebabOpen(false)
+    if (!confirm('Delete this campaign?')) return
+    await removeCamp(campaign.id)
+    router.push('/')
+  }
 
   const overviewHref = `/campaign/${campaign.id}`
   const onOverview = pathname === overviewHref
@@ -67,10 +98,51 @@ export default function Workspace({ campaign, activeRoundId, children }: Props) 
     <div className="workspace">
       <div className="workspace-mid">
         <div className="workspace-mid-header">
-          <div className="workspace-mid-title">{campaignLabel(campaign)}</div>
-          <div className="workspace-mid-status">
-            <span className={`ws-active-dot${campaign.active ? '' : ' inactive'}`} />
-            {campaign.active ? 'Actively interviewing' : 'Not interviewing anymore'}
+          <div className="workspace-mid-title-row">
+            <div className="workspace-mid-title">{campaignLabel(campaign)}</div>
+            <div className="status-dropdown" ref={kebabRef}>
+              <button type="button" className="bank3-icon-btn" title="More options" onClick={() => setKebabOpen(v => !v)}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="5" r="1.6" /><circle cx="12" cy="12" r="1.6" /><circle cx="12" cy="19" r="1.6" />
+                </svg>
+              </button>
+              {kebabOpen && (
+                <div className="status-dropdown-menu">
+                  <button type="button" className="status-dropdown-item" onClick={toggleHidden}>
+                    {campaign.hidden ? 'Unhide' : 'Hide from list'}
+                  </button>
+                  <button type="button" className="status-dropdown-item danger" onClick={deleteCampaign}>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="status-dropdown" ref={activeMenuRef}>
+            <button type="button" className="ws-status-trigger" onClick={() => setActiveMenuOpen(v => !v)}>
+              <span className={`ws-active-dot${campaign.active ? '' : ' inactive'}`} />
+              {campaign.active ? 'Actively interviewing' : 'Not interviewing anymore'}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            {activeMenuOpen && (
+              <div className="status-dropdown-menu">
+                {[
+                  { label: 'Actively interviewing', val: true },
+                  { label: 'Mark not interviewing', val: false },
+                ].map(opt => (
+                  <button
+                    key={opt.label}
+                    type="button"
+                    className={`status-dropdown-item${campaign.active === opt.val ? ' active' : ''}`}
+                    onClick={() => campaign.active === opt.val ? setActiveMenuOpen(false) : toggleActive()}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
