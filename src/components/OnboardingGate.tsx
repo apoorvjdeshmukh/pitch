@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { useApp } from '@/context/AppContext'
 
 export default function OnboardingGate() {
-  const { user, profile, setProfile } = useApp()
+  const { user, profile, setProfile, dataLoaded } = useApp()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
 
-  if (!user || profile.onboarded) return null
+  if (!user || !dataLoaded || profile.onboarded) return null
 
   async function finish(skip: boolean) {
     await setProfile({
