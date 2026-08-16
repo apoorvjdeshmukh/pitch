@@ -74,6 +74,16 @@ export default function DateTimePicker({ value, onChange }: Props) {
     setOpen(false)
   }
 
+  // MINUTE_OPTS only offers 5-minute increments, but an existing scheduledAt
+  // (set elsewhere, e.g. AI-suggested times) can land on any minute. Without
+  // this, a value like :13 has no matching <option>, so the <select> silently
+  // falls back to displaying :00 - and saving from there would silently
+  // overwrite the real time. Splicing the actual value in keeps it visible
+  // and preserved until the user deliberately changes it.
+  const minuteOpts = MINUTE_OPTS.includes(minute)
+    ? MINUTE_OPTS
+    : [...MINUTE_OPTS, minute].sort((a, b) => a - b)
+
   const today = new Date()
   const gridStart = new Date(viewMonth)
   gridStart.setDate(gridStart.getDate() - gridStart.getDay())
@@ -125,7 +135,7 @@ export default function DateTimePicker({ value, onChange }: Props) {
             </select>
             <span className="dt-time-colon">:</span>
             <select value={minute} onChange={e => updateTime(hour12, Number(e.target.value), isPM)}>
-              {MINUTE_OPTS.map(m => <option key={m} value={m}>{pad(m)}</option>)}
+              {minuteOpts.map(m => <option key={m} value={m}>{pad(m)}</option>)}
             </select>
             <div className="dt-ampm">
               <button type="button" className={!isPM ? 'active' : ''} onClick={() => updateTime(hour12, minute, false)}>AM</button>

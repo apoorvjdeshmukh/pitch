@@ -89,7 +89,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .date-chip:hover { background: var(--surface-2); }
 
 .datetime-picker { position: relative; }
-.dt-popover { position: absolute; top: calc(100% + 0.5rem); right: 0; z-index: 30; width: 260px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: 0 8px 24px rgba(40,30,15,.16); padding: 0.85rem; }
+.dt-popover { position: absolute; top: calc(100% + 0.5rem); right: 0; z-index: 30; width: 296px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: 0 8px 24px rgba(40,30,15,.16); padding: 0.85rem; }
 .dt-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
 .dt-cal-title { font-size: 0.82rem; font-weight: 700; color: var(--ink); }
 .dt-cal-nav { background: none; border: none; color: var(--muted); font-size: 1.1rem; line-height: 1; cursor: pointer; padding: 0.15rem 0.5rem; border-radius: 0.4rem; }
@@ -102,10 +102,10 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .dt-cal-day.today { font-weight: 700; color: var(--sage); }
 .dt-cal-day.selected { background: var(--sage); color: #fff; font-weight: 700; }
 .dt-time-row { display: flex; align-items: center; gap: 0.35rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
-.dt-time-row select { border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.3rem 0.4rem; font-size: 0.8rem; font-family: inherit; color: var(--ink); background: var(--surface); }
+.dt-time-row select { width: auto; flex-shrink: 0; border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.3rem 0.4rem; font-size: 0.8rem; font-family: inherit; color: var(--ink); background: var(--surface); }
 .dt-time-colon { font-weight: 700; color: var(--muted); }
-.dt-ampm { display: flex; margin-left: auto; border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden; }
-.dt-ampm button { border: none; background: var(--surface); color: var(--muted); font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.5rem; cursor: pointer; }
+.dt-ampm { display: flex; flex-shrink: 0; margin-left: auto; border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden; }
+.dt-ampm button { border: none; background: var(--surface); color: var(--muted); font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.45rem; cursor: pointer; }
 .dt-ampm button.active { background: var(--sage); color: #fff; }
 .dt-popover-footer { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.75rem; }
 .dt-popover-footer .btn, .dt-popover-footer .btn-outline { flex: 1; padding: 0.4rem; font-size: 0.78rem; }
