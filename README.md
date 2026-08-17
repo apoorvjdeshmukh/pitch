@@ -16,7 +16,7 @@ Runs entirely on your own accounts — your own Supabase project, your own Anthr
 - **Interviewer research** — paste a LinkedIn bio or background note, get a read on what they likely care about and how to angle your answers for them specifically
 - **STAR story bank that compounds across jobs** — a guided Q&A flow turns a real moment into a polished story once, then tracks which competencies are covered and resurfaces stories automatically wherever they're relevant, campaign after campaign
 - **Day Before Brief** — a single-page, full-ink takeover pulling your best stories, company facts, interviewer notes, and questions to ask into one read-once page
-- **Per-campaign file uploads** — attach resumes, JDs, or notes to a campaign, stored privately per user
+- **Per-campaign file uploads** — attach resumes, JDs, or notes to a campaign, stored privately per user. PDF/DOCX/XLSX/images open in a new tab; HTML documents render in-app on their own page, no PDF-style pagination
 - **Offline copy** — a snapshot view of your prep that works without a connection, useful right before you walk into a room with bad signal
 - **Installable PWA** — add it to your home screen like a native app
 - **Private by default** — Google OAuth or email/password auth, with row-level security in Postgres so every user only ever sees their own data
