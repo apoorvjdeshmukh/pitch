@@ -88,7 +88,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .date-chip.empty { color: var(--faint); font-weight: 500; }
 .date-chip:hover { background: var(--surface-2); }
 
-.datetime-picker { position: relative; }
+.datetime-picker { position: relative; display: inline-block; }
 .dt-popover { position: absolute; top: calc(100% + 0.5rem); right: 0; z-index: 30; width: 296px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: 0 8px 24px rgba(40,30,15,.16); padding: 0.85rem; }
 .dt-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
 .dt-cal-title { font-size: 0.82rem; font-weight: 700; color: var(--ink); }
@@ -107,6 +107,12 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .dt-ampm { display: flex; flex-shrink: 0; margin-left: auto; border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden; }
 .dt-ampm button { border: none; background: var(--surface); color: var(--muted); font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.45rem; cursor: pointer; }
 .dt-ampm button.active { background: var(--sage); color: #fff; }
+/* The mobile "Scheduled"/"Status" .sec cards put their trigger hard against
+   the card's left edge (unlike the desktop header/sidebar contexts, where
+   the trigger sits with room on both sides) - right:0 anchoring there pins
+   the popover past the left edge of the screen instead of under the button.
+   Anchoring from the left instead keeps it attached to the visible trigger. */
+.sec .dt-popover, .sec .status-dropdown-menu { left: 0; right: auto; }
 .dt-popover-footer { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.75rem; }
 .dt-popover-footer .btn, .dt-popover-footer .btn-outline { flex: 1; padding: 0.4rem; font-size: 0.78rem; }
 
@@ -266,7 +272,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .rounds-progress-seg.filled { background: var(--sage); }
 
 /* ── Status dropdown ── */
-.status-dropdown { position: relative; }
+.status-dropdown { position: relative; display: inline-block; }
 .status-dropdown-trigger {
   display: inline-flex; align-items: center; gap: 0.4rem;
   padding: 0.5rem 0.85rem; border-radius: var(--radius-pill);
@@ -510,9 +516,17 @@ body.logged-in .bottom-nav {
 @keyframes pop-in { 0% { opacity: 0; transform: translateY(8px) scale(.94); } 60% { opacity: 1; transform: translateY(0) scale(1.02); } 100% { transform: none; } }
 
 /* ── Entrance animation ── */
+/* No `both`/`forwards` fill-mode: retaining the animation's end state (even
+   though it's visually a no-op transform:none) keeps CSS treating these
+   elements as having an active animation on transform/opacity indefinitely,
+   which forces a permanent stacking context on every card. That trapped
+   absolutely-positioned popovers (e.g. the date picker) nested inside one
+   card below sibling cards that appear later in the DOM. Dropping the fill
+   mode lets the stacking context - and the animation's hold on the
+   computed style - end when the 320ms animation actually finishes. */
 .sec, .campaign-card, .round-item, .story-card, .mini-card,
 .brief-story-item, .brief-fact, .brief-q, .artifact-card {
-  animation: fadeUp 320ms var(--ease) both;
+  animation: fadeUp 320ms var(--ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
