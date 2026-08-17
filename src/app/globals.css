@@ -471,6 +471,10 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .modal-footer button { flex: 1; }
 .modal-footer .btn { margin-top: 0; }
 
+.file-viewer-page { display: flex; flex-direction: column; height: 100dvh; }
+.file-viewer-frame-wrap { flex: 1; min-height: 0; padding: 0 1.25rem calc(1rem + env(safe-area-inset-bottom)); }
+.file-viewer-frame { width: 100%; height: 100%; border: none; border-radius: 0.75rem; background: #fff; box-shadow: 0 1px 2px rgba(40,30,15,.04), 0 0 0 1px rgba(40,30,15,.06); }
+
 /* ── Page footer ── */
 .page-footer { padding: 0 1.25rem calc(1.5rem + env(safe-area-inset-bottom)); text-align: center; }
 .home-page-wrap { display: flex; flex-direction: column; min-height: 100dvh; }

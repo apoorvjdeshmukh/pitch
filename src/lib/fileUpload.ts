@@ -13,9 +13,11 @@ const EXT_TYPE_MAP: Record<string, CampaignFileType> = {
   jpeg: 'image',
   webp: 'image',
   gif: 'image',
+  html: 'html',
+  htm: 'html',
 }
 
-export const ACCEPT_ATTR = '.pdf,.docx,.xlsx,.xls,.png,.jpg,.jpeg,.webp,.gif'
+export const ACCEPT_ATTR = '.pdf,.docx,.xlsx,.xls,.png,.jpg,.jpeg,.webp,.gif,.html,.htm'
 
 export function detectFileType(file: File): CampaignFileType | null {
   const ext = file.name.split('.').pop()?.toLowerCase() ?? ''
@@ -23,7 +25,7 @@ export function detectFileType(file: File): CampaignFileType | null {
 }
 
 export function fileTypeIcon(type: CampaignFileType): string {
-  return { pdf: '📄', docx: '📝', xlsx: '📊', image: '🖼️', link: '🔗' }[type]
+  return { pdf: '📄', docx: '📝', xlsx: '📊', image: '🖼️', html: '🌐', link: '🔗' }[type]
 }
 
 export function formatFileSize(bytes?: number): string {

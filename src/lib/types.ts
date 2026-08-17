@@ -72,7 +72,7 @@ export interface Round {
   scheduledAt?: string | null
 }
 
-export type CampaignFileType = 'pdf' | 'docx' | 'xlsx' | 'image' | 'link'
+export type CampaignFileType = 'pdf' | 'docx' | 'xlsx' | 'image' | 'html' | 'link'
 
 export interface CampaignFile {
   id: string

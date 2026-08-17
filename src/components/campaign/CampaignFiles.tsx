@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useApp } from '@/context/AppContext'
 import { uploadCampaignFile, getFileSignedUrl, deleteCampaignFile } from '@/lib/storage'
 import { showToast } from '@/lib/toastStore'
@@ -13,6 +14,7 @@ import type { Campaign, CampaignFile } from '@/lib/types'
 
 export default function CampaignFiles({ campaign }: { campaign: Campaign }) {
   const { user, mutateCamp, uid } = useApp()
+  const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [showLinkForm, setShowLinkForm] = useState(false)
@@ -28,7 +30,7 @@ export default function CampaignFiles({ campaign }: { campaign: Campaign }) {
     if (!file || !user) return
     if (atCap) { showToast(`This campaign already has ${MAX_CAMPAIGN_FILES} files — delete one to add another.`); return }
     const type = detectFileType(file)
-    if (!type) { showToast('Only PDF, DOCX, XLSX, and image files are allowed.'); return }
+    if (!type) { showToast('Only PDF, DOCX, XLSX, image, and HTML files are allowed.'); return }
     if (file.size > MAX_FILE_SIZE_BYTES) { showToast(`File is too large — max ${(MAX_FILE_SIZE_BYTES / (1024 * 1024)).toFixed(0)}MB per file.`); return }
 
     setUploading(true)
@@ -63,6 +65,10 @@ export default function CampaignFiles({ campaign }: { campaign: Campaign }) {
   async function openFile(f: CampaignFile) {
     if (f.type === 'link') { window.open(f.url, '_blank'); return }
     if (!f.storagePath) return
+    // HTML docs get their own page within the app - full navigation with a
+    // breadcrumb back to this campaign, not a modal - so they read as a real
+    // continuous document instead of an overlay bolted onto this screen.
+    if (f.type === 'html') { router.push(`/campaign/${campaign.id}/files/${f.id}`); return }
     try {
       const url = await getFileSignedUrl(f.storagePath)
       window.open(url, '_blank')
@@ -125,7 +131,7 @@ export default function CampaignFiles({ campaign }: { campaign: Campaign }) {
         </div>
       )}
 
-      <p className="source-note">PDF, DOCX, XLSX, images, and links — max 3MB per file, isolated to this campaign only.</p>
+      <p className="source-note">PDF, DOCX, XLSX, images, HTML, and links — max 3MB per file, isolated to this campaign only.</p>
     </div>
     </Hint>
   )
